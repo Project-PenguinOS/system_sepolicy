@@ -12,6 +12,19 @@ binder_call(cameraserver, binderservicedomain)
 binder_call(cameraserver, appdomain)
 binder_service(cameraserver)
 
+# Allow cameraserver to use shared memory (Ashmem) passed from apps.
+# Needed when a CaptureRequest's /Result metadata size exceeds the 16 KB inplace
+# limit, forcing libbinder (Parcel::writeBlob) to allocate and transfer an Ashmem FD.
+# (This is for the case when FMQ is not used for metadata transfer)
+allow cameraserver appdomain_tmpfs:file { getattr map read write};
+
+# Allow cameraserver to use shared memory (memfd) passed to and from apps.
+# read permissions are needed for reading CaptureRequest settings and write
+# is needed for sending clients CameraCharacteristics metadata.
+# Needed when apps target SDK 37+ and Binder uses memfd instead of deprecated ashmem.
+allow cameraserver appdomain:memfd_file { getattr map read write };
+
+
 hal_client_domain(cameraserver, hal_camera)
 allow cameraserver hal_camera_server:process signal;
 hal_client_domain(cameraserver, hal_graphics_allocator)

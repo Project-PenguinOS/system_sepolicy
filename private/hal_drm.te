@@ -47,6 +47,12 @@ allow { hal_drm -hal_widevine_system } sysfs:file r_file_perms;
 allow { hal_drm -hal_widevine_system } tee_device:chr_file rw_file_perms;
 
 allow hal_drm_server { appdomain -isolated_app }:fd use;
+# Allow access to memfd files (b/494127812)
+
+
+
+allow hal_drm_server { appdomain -isolated_app_all }:memfd_file { getattr read write map };
+
 
 # Reduce the audit log spam caused by the Rikers anti-root check (b/393637335)
 dontaudit hal_drm system_userdir_file:dir search;
