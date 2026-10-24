@@ -64,3 +64,10 @@ unix_socket_send(zygote_next, system_unsolzygote, system_server)
 
 # Allow Native Zygote to write to statsd
 unix_socket_send(zygote_next, statsdw, statsd)
+
+# The native app zygote writes memfds (e.g. its copy of the seapp contexts)
+# before switching to the app domain. Give them a dedicated tmpfs label
+# instead of the generic tmpfs one, which zygote_next may not write.
+type zygote_next_tmpfs, file_type;
+tmpfs_domain(zygote_next)
+allow native_app_zygote zygote_next_tmpfs:file { read getattr map };
