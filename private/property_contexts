@@ -495,6 +495,8 @@ ro.audio.headtracking_enabled u:object_r:audio_config_prop:s0 exact bool
 # Boolean property used in AudioPolicyManager to configure whether
 # to enable spatialization for stereo channel mask
 ro.audio.stereo_spatialization_enabled u:object_r:audio_config_prop:s0 exact bool
+# Engine parameter id that receives the largest active track channel count
+ro.audio.spatializer_channel_count_param u:object_r:audio_config_prop:s0 exact int
 
 # Boolean property used in AudioPolicyInterfaceImpl to configure whether
 # to disable usecase validator for game mode
